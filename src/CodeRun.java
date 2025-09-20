@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 
 public class CodeRun {
+    static boolean debug = true;
     public static void main(String[] args) throws Exception {
         String directoryPath = System.getProperty("user.dir");
         File directory = new File(directoryPath);
@@ -27,7 +28,7 @@ public class CodeRun {
         Scanner sc = new Scanner(System.in);
         int read = -1;
         while (read < 0 || read >= chooselist.size()) {
-            sc.nextLine();
+            //sc.nextLine();
             read = sc.nextInt();
         }
         Object[] chooseListArr = chooselist.toArray();
@@ -45,41 +46,69 @@ public class CodeRun {
         while (code.hasNextLine()) {
 
             String line = code.nextLine();
-            Token[] tokens = tokenize(line.split("[\\s{]+"));
+            Token[] tokens = tokenize(line.split("\\s+|(?=\\{)"));
+            for (Token token : tokens) {
+                System.out.print("'" + token.content + "'(" + token.function + ") ");
+                
+            }
+            System.out.println();
             boolean first = true;
             int tokenNr = 0;
             for (Token token : tokens) {
                 if (first) {
                     first = false;
                     if (token.function == 0) {
-                        throw new Exception("Invalid command argument on line " + lineNr);
+                        throw new Exception("Invalid command argument, got '" + token.content + "' on line" + lineNr);
                     } else if (token.function == 1) {
-                        pw.println(x + " 0 0 1 0.001");
-                        x++;
+                        if(inGroup){
+                            pw.println(x + " 0 0 3 0.001");
+                            x++;
+                        }
+                        else{
+                            throw new Exception("Recieve not in group on " + lineNr);
+                        }
                     } else if (token.function == 2) {
-                        pw.println(x + " 0 0 1 0.001");
-                        x++;
+                        if(inGroup){
+                            pw.println(x + " 0 0 4 0.001");
+                            x++;
+                        }
+                        else{
+                            throw new Exception("Transmit not in group on " + lineNr);
+                        }
                     } else if (token.function == 3) {
-                        x++;
-                        pw.println(x + " 0 0 0 0.001");
-                        x++;
+                        if(inGroup){
+                            x++;
+                            pw.println(x + " 0 0 0 0.001");
+                            x++;
+                        }
+                        else{
+                            throw new Exception("Block not in group on " + lineNr);
+                        }
                     } else if (token.function == 4) {
                     } else if (token.function == 5) {
-                        if (tokens.length > tokenNr) {
-                            if (tokens[tokenNr + 1].function == 901) {
-                                expectParanthesis = true;
+                        if (tokens.length > tokenNr+1) {
+                            if (tokens[tokenNr + 1].function == 900) {
                                 inGroup = true;
                                 pw.println(x + " 0 0 1 0.001");
                                 pw.println(x + " 1 0 2 0.001");
                                 x += 2;
-                                // continue here or whatever
+                                
                             } else {
-                                throw new Exception("Unopened '{' on line " + lineNr);
+                                throw new Exception("Unopened '{', insted got " + tokens[tokenNr + 1].content +  " on line " + lineNr);
                             }
                         } else {
                             throw new Exception("Invalid group structure on line " + lineNr);
                         }
                     } else if (token.function == 901) {
+                        if(inGroup){
+                            inGroup = false;
+                        }
+                        else{
+                            throw new Exception("Unnecesarry '}' on line " + lineNr);
+                        }
+                    }
+                    else if(token.function == 1000){
+                        first = true;
                     }
                 } else {
 
@@ -129,6 +158,8 @@ class Token {
             function = 900;
         } else if (content.toLowerCase().equals("}")) {
             function = 901;
+        } else if (content.toLowerCase().equals("") || content.toLowerCase().equals(" ")) {
+            function = 1000; // ignore
         } else {
             function = 0;
         }
