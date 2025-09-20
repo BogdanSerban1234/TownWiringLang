@@ -21,6 +21,10 @@ class Place {
     static Robot r; // still used for keyboard & clicks
     static int xorig = 245, yorig = 5, zorig = 110;
     static boolean debug = false;
+    //do not change these final variables please
+    static final int originalX = 1920, originalY = 1080;
+    static int screenX = 1920, screenY = 1080;
+    static int xOffset = 0, yOffset = 0;
 
     // DON'T CLICK AFTER RUNNING
     public static void main(String[] args) throws FileNotFoundException {
@@ -106,6 +110,12 @@ class Place {
     }
 
     static void moveMouse(int x, int y) throws InterruptedException {
+        float scaleX = (float) screenX / originalX;
+        float scaleY = (float) screenY / originalY;
+        x = (int)(x * scaleX);
+        y = (int)(y * scaleY);
+        x += xOffset;
+        y += yOffset;
         r.mouseMove(x, y);
         Thread.sleep(50);
     }
@@ -150,6 +160,12 @@ class Place {
     }
 
     static void clickAndWrite(int x, int y, String text) throws InterruptedException {
+        float scaleX = (float) screenX / originalX;
+        float scaleY = (float) screenY / originalY;
+        x = (int)(x * scaleX);
+        y = (int)(y * scaleY);
+        x += xOffset;
+        y += yOffset;
         r.mouseMove(x, y);
         Thread.sleep(25);
         r.mouseMove(x + 3, y); // tiny nudge
@@ -166,7 +182,12 @@ class Place {
     }
 
     static void safeClickAt(int x, int y) throws InterruptedException {
-
+        float scaleX = (float) screenX / originalX;
+        float scaleY = (float) screenY / originalY;
+        x = (int)(x * scaleX);
+        y = (int)(y * scaleY);
+        x += xOffset;
+        y += yOffset;
         r.mouseMove(x, y);
         // Thread.sleep(1000);
         Thread.sleep(25);
@@ -180,7 +201,12 @@ class Place {
     }
 
     static void safeClickAt(int x, int y, boolean once) throws InterruptedException {
-
+        float scaleX = (float) screenX / originalX;
+        float scaleY = (float) screenY / originalY;
+        x = (int)(x * scaleX);
+        y = (int)(y * scaleY);
+        x += xOffset;
+        y += yOffset;
         r.mouseMove(x, y);
         // Thread.sleep(1000);
         Thread.sleep(25);
@@ -196,8 +222,10 @@ class Place {
     static void safeDragClickAt(int startX, int startY) throws InterruptedException {
         HWND hwnd = User32.INSTANCE.FindWindowA(null, "Roblox");
         User32.INSTANCE.SetForegroundWindow(hwnd);
-        int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        //int screenWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+        //int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int screenWidth = screenX;
+        int screenHeight = screenY;
 
         // Convert to 0-65535 absolute coordinates
         int sx = startX * 65535 / screenWidth;
