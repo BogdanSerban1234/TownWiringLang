@@ -52,3 +52,4 @@ nextLine
 //Calling it like this simply runs the function
 button(hello hello)
 ```
+The place script has only been tested on a 1080p 16:9 monitor.
