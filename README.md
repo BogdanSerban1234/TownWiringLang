@@ -1,7 +1,7 @@
 Town (Roblox Game) wiring language
 An example of simple code here would be:
-
-button(a){/n
+```
+button(a){
  transmit(a)
 }
 group{
@@ -11,7 +11,7 @@ group{
 group{
  receive(color1)
 }
-
+```
 
 And a more complex example:
 (there are only single line comments: //)
