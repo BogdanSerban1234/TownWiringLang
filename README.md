@@ -1,7 +1,7 @@
 Town (Roblox Game) wiring language
 An example of simple code here would be:
 
-button(a){
+button(a){/n
  transmit(a)
 }
 group{
