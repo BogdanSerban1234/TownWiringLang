@@ -15,7 +15,7 @@ group{
 
 And a more complex example:
 (there are only single line comments: //)
-
+```
 group{
     transmit(P1)
 } //Group structure starts and ends must be on their own lines. (You cannot do group{func})
@@ -51,4 +51,4 @@ group{
 nextLine
 //Calling it like this simply runs the function
 button(hello hello)
-
+```
