@@ -43,6 +43,10 @@ button(a b){
     transmit(a)
     transmit(b)
 }
+//Or with a single parameter
+button2(c){
+    transmit(c)
+}
 //Calling it like this embeds it into the group
 group{
     button(hello hello)
@@ -51,5 +55,6 @@ group{
 nextLine
 //Calling it like this simply runs the function
 button(hello hello)
+button2(hello)
 ```
 The place script has only been tested on a 1080p 16:9 monitor.
